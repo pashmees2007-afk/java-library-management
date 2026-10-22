@@ -1,87 +1,136 @@
 # Library Management System
 
-A Java desktop application for running a small library: a catalogue of books,
-member records, and an issue/return desk that tracks due dates and fines — all
-stored in a single SQLite database file.
+[![Build and test](https://github.com/pashmees2007-afk/java-library-management/actions/workflows/build.yml/badge.svg)](https://github.com/pashmees2007-afk/java-library-management/actions/workflows/build.yml)
 
-**Java 17+ with Swing** for the interface and **SQLite via JDBC** for storage.
-One dependency, no build tool required.
+A desktop app for running a small library — a school, college or community one.
+You keep a list of the books you own and a list of the people who may borrow
+them, and the app tracks who has what, when it is due back, and what they owe if
+it comes back late.
+
+Everything is saved in one file on your computer (`library.db`). There is no
+server to set up, no account to create and no internet connection needed.
+
+**Written in Java**, with a **Swing** window for the interface and **SQLite**
+for storage. It needs one extra file (a database driver) which is already
+included, so you can download the project and run it straight away.
+
+## What you can do with it
+
+- Keep a catalogue of books — title, author, ISBN, category, shelf code, and how
+  many copies you own
+- Register members and set how many books each may borrow at once
+- Issue a book to a member, with the due date worked out for you
+- Take books back, and charge (or forgive) a fine when they are late
+- Renew a loan that is not yet overdue
+- See at a glance what is overdue, who has it, and how to contact them
+- Export your books, members or loan history to CSV for Excel
+- Back up the whole library to a single file
 
 ## Screenshots
 
 ### Dashboard
 
-Headline counts, the queue of overdue loans with borrower contact details, the
-most-borrowed titles, and a 14-day issuing chart.
+The first screen. It shows how many books and members you have, how many copies
+are out on loan, what is overdue, and the total unpaid fines. The red list is the
+one that needs attention — it includes each borrower's phone number so you can
+chase them.
 
 ![The dashboard](docs/screenshots/dashboard.png)
 
 ### Catalogue
 
-Search across title, author, ISBN and publisher, filter by category or to what
-is on the shelf, and add or edit records in the side form.
+Every book you own. Type in the search box to find something by title, author,
+ISBN or publisher, or narrow the list to one category. Click a row to edit it in
+the form on the right; the "New book" button clears the form for a fresh entry.
+Books with no copies left on the shelf are shown in orange.
 
 ![The catalogue tab](docs/screenshots/catalogue.png)
 
 ### Members
 
-Member records with their borrowing limit and dues; selecting one shows their
-full borrowing history underneath.
+Everyone who can borrow. "On loan" is how many books they are holding right now
+and "Dues" is what they owe. Click a member to see every book they have ever
+borrowed in the panel underneath.
 
 ![The members tab](docs/screenshots/members.png)
 
 ### Circulation desk
 
-Type to filter a member and an available title, then issue. Overdue loans are
-flagged in red with the fine accrued so far.
+Where the day-to-day work happens. Pick a member, pick a book that is on the
+shelf, and press "Issue book". The list on the right shows the current loans;
+select one to take it back, renew it, or settle a fine. Overdue rows are red.
 
 ![The circulation desk](docs/screenshots/circulation.png)
 
 ### Settings
 
-Circulation rules, CSV exports and database backup.
+Change the library's name, how long a loan lasts and how much the fine is per
+day. Also where you export to CSV or back up the database.
 
 ![The settings tab](docs/screenshots/settings.png)
 
-## Quick start
+## Getting started
 
-On Windows:
+You need **Java 17 or newer**. To check, open a terminal and run:
+
+```bash
+java -version
+```
+
+If that prints a version number you are ready. If it says the command was not
+found, install a JDK first — [Adoptium](https://adoptium.net) is a free and
+straightforward choice.
+
+Then download this project (the green **Code** button → **Download ZIP**, or
+`git clone`), open a terminal in the project folder, and run:
 
 ```bash
 run.bat --demo
 ```
 
-`--demo` seeds a sample library (16 titles, 8 members, 16 loans including
-overdue ones) the first time it runs, so there is something to click on. Drop
-the flag to start with an empty database:
+That does three things: compiles the code, fills the library with example data
+so there is something to look at, and opens the window.
+
+Leave off `--demo` to start with an empty library of your own:
 
 ```bash
 run.bat
 ```
 
-`run.bat` compiles the project first if `build\classes` is missing. To build
-and test explicitly:
+The first run creates `library.db` in the project folder. That file **is** your
+library — everything you add is saved there immediately. Copy it to move your
+library to another computer.
 
-```bash
-build.bat
-```
+### A two-minute tour
 
-```bash
-test.bat
-```
+With the demo data loaded, try this:
 
-### Command-line options
+1. Open the **Circulation** tab.
+2. In the Member box type `Asha`, then click her name in the list below.
+3. In the Book box type `Hobbit`, then click the title.
+4. Press **Issue book**. The loan appears in the list on the right with its due
+   date, and the catalogue now shows one fewer copy on the shelf.
+5. Select that new row and press **Accept return**. The copy goes back on the
+   shelf.
+6. Now change the filter at the top right to **Overdue**. These loans are
+   already late in the demo data. Select one and press **Accept return** — the
+   app tells you what the fine is and asks whether to charge it.
 
-| Flag | Meaning |
+### Other options
+
+| Command | What it does |
 | --- | --- |
-| `--db PATH` | Use a different database file (default `library.db` beside the scripts) |
-| `--demo` | Seed sample records if the database has no books yet |
-| `--help` | Print the options and exit |
+| `run.bat` | Open the app on `library.db` |
+| `run.bat --demo` | Fill an empty library with example data first |
+| `run.bat --db school.db` | Use a different library file |
+| `run.bat --help` | List the options and exit |
+| `build.bat` | Just compile, do not run |
+| `test.bat` | Compile and run all the tests |
 
-### Other platforms
+### Running it on Mac or Linux
 
-The scripts are Windows batch files, but nothing else is Windows-specific. On
-macOS or Linux (note the `:` classpath separator):
+The `.bat` files are for Windows, but the code itself runs anywhere Java does.
+Use these two commands instead (note the `:` instead of `;` in the classpath):
 
 ```bash
 find src/main/java -name '*.java' > sources.txt && javac -d build/classes -cp lib/sqlite-jdbc-3.50.3.0.jar @sources.txt
@@ -91,124 +140,105 @@ find src/main/java -name '*.java' > sources.txt && javac -d build/classes -cp li
 java -cp "build/classes:lib/sqlite-jdbc-3.50.3.0.jar" com.library.Main --demo
 ```
 
-## Requirements
+## How borrowing works
 
-- **JDK 17 or newer** (developed against JDK 26). `java -version` should work
-  from a terminal.
-- **sqlite-jdbc**, already in `lib/sqlite-jdbc-3.50.3.0.jar`. If it is missing,
-  download it from
-  [Maven Central](https://repo1.maven.org/maven2/org/xerial/sqlite-jdbc/3.50.3.0/)
-  and drop it in `lib/`. The driver bundles the native SQLite library for every
-  common platform, so there is nothing else to install.
+The app will not let you break these rules, so you cannot accidentally lend a
+book you do not have:
 
-On JDK 24+ the launcher passes `--enable-native-access=ALL-UNNAMED`, which
-silences the warning the driver would otherwise print when it loads its native
-library.
+- **A copy has to be on the shelf.** If you own three copies and all three are
+  out, the next person has to wait.
+- **One copy per person per title.** The same member cannot take two copies of
+  the same book.
+- **Everyone has a limit.** It depends on the kind of membership: Students 3
+  books, Teachers 6, Staff 5, Public 2. You can set a different limit on any
+  individual member's record, and that one wins.
+- **Overdue books block new ones.** If a member is already late with something,
+  they cannot borrow again until it is sorted out.
+- **Inactive members cannot borrow.** Untick "Membership active" to suspend
+  someone without deleting their history.
+- **Renewals are limited.** A loan can be renewed twice, and only while it is not
+  already overdue. After that the book has to come back.
+- **Nothing in use can be deleted.** A book or member with an open loan cannot be
+  removed until the book is returned.
 
-## The five tabs
+### How a fine is worked out
 
-**Dashboard** — headline counts (titles, members, copies on loan, overdue,
-fines outstanding), the queue of overdue loans with borrower contact details,
-the most-borrowed titles, and a 14-day issuing chart.
+A fine is simply **days late × the daily rate**. With the default settings — a
+14-day loan and a fine of 2.00 per day:
 
-**Catalogue** — every title with its copy counts. Search across title, author,
-ISBN and publisher, filter by category or to what's on the shelf, and add, edit
-or delete records in the side form. Titles with nothing left on the shelf are
-highlighted.
+> A book borrowed on 1 October is due back on 15 October. It is returned on 18
+> October, which is 3 days late, so the fine is **6.00**.
 
-**Members** — member records with membership type, contact details, borrowing
-limit and status. Selecting a member shows their full borrowing history and what
-they currently owe.
+While a book is still out and overdue the fine keeps growing, and you can see the
+running total on the dashboard and against the member. The amount is only written
+down when you accept the return. At that point you can charge it, or press
+**Return & waive fine** to let it go. Charged fines stay marked unpaid until you
+press **Mark fine paid**.
 
-**Circulation** — the working desk. Type to filter a member and an available
-title, set the loan period, and issue. The loan list filters by status (active,
-on loan, overdue, returned, unpaid fines) and offers accept return, return and
-waive the fine, renew, and mark fine paid.
-
-**Settings** — library name, loan period and fine per day; CSV exports for the
-catalogue, members and loan history; and a one-click database backup.
-
-## Circulation rules
-
-These live in `LibraryDatabase`, not in the interface, so the UI cannot get
-around them:
-
-- A copy is only issued when one is on the shelf, and one member cannot hold two
-  copies of the same title.
-- Issuing is refused when the member is inactive, already at their book limit,
-  or holding anything overdue.
-- Book limits come from the membership type (Student 3, Teacher 6, Public 2,
-  Staff 5); a limit set on the member record overrides it.
-- Fines accrue per day past the due date. The amount is written to the loan when
-  the return is accepted, and can be waived at the desk or marked paid later.
-- A loan can be renewed twice, and only while it is not yet overdue.
-- Books and members with open loans cannot be deleted.
-
-Changing the loan period or fine rate in Settings affects new loans and ongoing
-fine calculations; loans already issued keep their due dates.
+You can change the loan length and the daily rate on the Settings tab. New
+settings apply to new loans and to fines still being counted; loans already
+issued keep the due date they were given.
 
 ## Keyboard shortcuts
 
 | Keys | Action |
 | --- | --- |
-| `Ctrl+1` … `Ctrl+5` | Jump to a tab |
-| `Ctrl+F` | Focus the search box |
-| `Ctrl+N` | Start a new book / member record |
-| `F5` | Reload every tab from the database |
-| `F1` | Shortcut help |
+| `Ctrl+1` … `Ctrl+5` | Jump straight to a tab |
+| `Ctrl+F` | Jump to the search box |
+| `Ctrl+N` | Start a new book or member |
+| `F5` | Reload everything from the database |
+| `F1` | Show the shortcut list |
 | `Esc` | Clear the search box |
 | `Ctrl+Q` | Quit |
 
-Double-clicking a row edits it in the catalogue and members tabs, and accepts
-the return at the circulation desk. Clicking a column heading sorts by it.
+Double-clicking a row opens it for editing, or accepts the return at the
+circulation desk. Clicking a column heading sorts by that column; click it again
+to reverse the order.
 
-## Project layout
+## How the project is put together
+
+The code is split into two halves, which is the main idea worth knowing:
+
+- **The data layer** (`db/LibraryDatabase.java`) talks to the database and owns
+  every rule above. If a rule is broken it refuses and explains why.
+- **The interface** (`ui/`) only draws screens and passes what you typed to the
+  data layer. It never decides anything itself.
+
+Keeping them apart means a rule cannot be skipped by accident from a button, and
+the rules can be tested without opening a window.
 
 ```
 build.bat / run.bat / test.bat   compile, run, test
-lib/sqlite-jdbc-3.50.3.0.jar     the only dependency
+lib/sqlite-jdbc-3.50.3.0.jar     the database driver (the only dependency)
 src/main/java/com/library/
-    Main.java                    entry point and command-line options
-    SampleData.java              demo catalogue, members and loan history
-    model/                       Book, Member, Loan and the view records
-    db/
-        LibraryDatabase.java     schema, queries and all circulation rules
-        LibraryException.java    rule violations, shown to the user as text
-        BookDraft, MemberDraft   form input, validated by the data layer
-        LoanFilter.java          the status filter at the desk
-    ui/
-        LibraryFrame.java        window: tabs, menu, status bar, shortcuts
-        Theme.java               palette, fonts, formatting helpers
-        Dialogs.java             modal prompts behind an interface
-        AppContext.java          what a tab needs from the window
-        TabPanel.java            shared tab plumbing
-        DashboardPanel, BooksPanel, MembersPanel,
-        CirculationPanel, SettingsPanel
-        components/              CardPanel, DataTable, FormGrid, SearchField,
-                                 Picker, StatCard, FlatButton, BarChart
-src/test/java/com/library/
-    TestHarness.java             tiny assertion runner (no test-framework JAR)
-    DatabaseTests.java           rules, validation, persistence (47 tests)
-    UiTests.java                 drives the real Swing panels (23 tests)
-    RunTests.java                runs both suites
+    Main.java                    starts the app, reads the command line
+    SampleData.java              the example books, members and loans
+    model/                       plain descriptions of a Book, Member, Loan
+    db/                          the database and all the borrowing rules
+    ui/                          the window, the five tabs, and the reusable
+                                 pieces they are built from (tables, forms,
+                                 search boxes, the chart)
+src/test/java/com/library/       the tests
+docs/screenshots/                the images in this file
 ```
 
-## Data model
+## Where your data lives
 
-Four tables in one SQLite file, with foreign keys on:
+Everything sits in one SQLite file with four tables:
 
-- **books** — title, author, ISBN (unique), category, publisher, year, shelf,
-  `total_copies` and `available_copies` (kept in step with the open loans by a
-  constraint and by every write path).
-- **members** — `member_code` (unique, auto-assigned as `M0001`, `M0002`, …),
-  name, contact details, membership type, join date, active flag, optional
-  personal book limit.
-- **loans** — book, member, issue date, due date, return date, renewal count,
-  fine and whether it has been paid.
-- **settings** — the editable rules.
+| Table | What it holds |
+| --- | --- |
+| `books` | One row per title, with how many copies you own and how many are on the shelf |
+| `members` | One row per person, with contact details and borrowing limit |
+| `loans` | One row per issue: which book, which member, out date, due date, return date, fine |
+| `settings` | The library name, loan length and fine rate |
 
-Every write runs inside a transaction that rolls back on failure, so an
-interrupted issue or return never leaves the copy counts wrong.
+Each change is saved in a transaction, which means that if something goes wrong
+halfway through, nothing is half-saved — the copy counts can never drift out of
+step with the loans.
+
+You can open `library.db` in any SQLite tool if you want to look at it directly,
+though the app is happier if you let it do the writing.
 
 ## Tests
 
@@ -216,23 +246,39 @@ interrupted issue or return never leaves the copy counts wrong.
 test.bat
 ```
 
-70 tests, no test framework needed. The database suite covers validation, the
-circulation rules, fine arithmetic, persistence across reopening the file, CSV
-export and backup. The UI suite builds the real `LibraryFrame` against a
-temporary database, stubs the modal dialogs through the `Dialogs` interface, and
-exercises the panels — adding and deleting books, rejecting invalid input,
-issuing and returning at the desk, charging and waiving fines, renewing, and
-saving settings. They skip themselves if no display is available.
+70 tests, and no extra software needed to run them.
 
-## Notes
+- **47 tests** check the rules and the database: that a fine is worked out
+  correctly, that the copy counts stay right, that a book on loan cannot be
+  deleted, that the data is still there after closing and reopening the file.
+- **23 tests** open the real window behind the scenes and click through it —
+  adding a book, catching a bad email address, issuing and returning, charging
+  and waiving a fine — so the screens are tested too, not just the logic.
 
-- The database is a single file. Copy it to move the library, or use
-  **Settings → Back up the database** for a consistent copy while the app is
-  running.
-- Dates are handled in local time throughout, including the SQLite comparisons
-  that decide what counts as overdue — `date('now')` in SQLite is UTC, which is
-  a day out for part of every day.
-- CSV exports open directly in Excel or any spreadsheet.
+Every push also runs both suites on GitHub Actions: on Windows with JDK 21
+through `build.bat` and `test.bat`, and on Linux with JDK 17 (the oldest version
+this project supports) using plain `javac`, with the window tests running on a
+virtual display.
+
+## If something goes wrong
+
+**"'java' is not recognized" / "command not found"** — Java is not installed, or
+not on your PATH. Install a JDK from [Adoptium](https://adoptium.net), then open
+a new terminal.
+
+**"Missing lib\sqlite-jdbc-3.50.3.0.jar"** — the database driver is not where it
+should be. Download it from
+[Maven Central](https://repo1.maven.org/maven2/org/xerial/sqlite-jdbc/3.50.3.0/)
+and put it in the `lib` folder.
+
+**The window opens but the lists are empty** — that is a brand new, empty
+library. Add a book and a member, or close it and run `run.bat --demo` to load
+the example data.
+
+**A change does not show up** — press `F5` to reload every tab from the database.
+
+**You want to start over** — close the app and delete `library.db`. The next run
+creates a fresh one. Make a copy first if you might want it back.
 
 ## License
 

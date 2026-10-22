@@ -63,7 +63,8 @@ jobs:
           xvfb-run -a java -cp "build/testclasses:build/classes:lib/sqlite-jdbc-3.50.3.0.jar" \
             com.library.RunTests
 
-      - name: Check the app starts and seeds its database
+      # Not a GUI check: --help prints and exits, so this just proves the
+      # launcher and its classpath are wired up correctly.
+      - name: Check the launcher responds
         run: |
-          xvfb-run -a timeout 30s java \
-            -cp "build/classes:lib/sqlite-jdbc-3.50.3.0.jar" com.library.Main --help
+          java -cp "build/classes:lib/sqlite-jdbc-3.50.3.0.jar" com.library.Main --help
