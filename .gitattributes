@@ -1,0 +1,7 @@
+* text=auto
+
+# Batch files must keep CRLF endings to run correctly on Windows.
+*.bat text eol=crlf
+
+# The SQLite driver is a binary; never let git rewrite its line endings.
+*.jar binary
