@@ -207,6 +207,12 @@ The code is split into two halves, which is the main idea worth knowing:
 Keeping them apart means a rule cannot be skipped by accident from a button, and
 the rules can be tested without opening a window.
 
+**[docs/DIAGRAMS.md](docs/DIAGRAMS.md)** draws all of this out properly: an ER
+diagram of the four tables, class diagrams of the model, the data layer and the
+interface, and a page on how the layers fit together. Each one is also saved as
+a PNG and an SVG in [docs/diagrams/](docs/diagrams) if you need it for a report
+or a slide.
+
 ```
 build.bat / run.bat / test.bat   compile, run, test
 lib/sqlite-jdbc-3.50.3.0.jar     the database driver (the only dependency)
@@ -220,6 +226,8 @@ src/main/java/com/library/
                                  search boxes, the chart)
 src/test/java/com/library/       the tests
 docs/screenshots/                the images in this file
+docs/DIAGRAMS.md                 ER and class diagrams, with notes
+docs/diagrams/                   those diagrams as PNG and SVG
 ```
 
 ## Where your data lives
