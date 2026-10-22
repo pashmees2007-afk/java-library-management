@@ -7,6 +7,40 @@ stored in a single SQLite database file.
 **Java 17+ with Swing** for the interface and **SQLite via JDBC** for storage.
 One dependency, no build tool required.
 
+![The dashboard, showing headline counts, the overdue queue and a 14-day issuing chart](docs/screenshots/dashboard.png)
+
+<details>
+<summary><b>More screenshots</b> — catalogue, members, circulation desk, settings</summary>
+
+### Catalogue
+
+Search across title, author, ISBN and publisher, filter by category or to what
+is on the shelf, and add or edit records in the side form.
+
+![The catalogue tab](docs/screenshots/catalogue.png)
+
+### Members
+
+Member records with their borrowing limit and dues; selecting one shows their
+full borrowing history underneath.
+
+![The members tab](docs/screenshots/members.png)
+
+### Circulation desk
+
+Type to filter a member and an available title, then issue. Overdue loans are
+flagged in red with the fine accrued so far.
+
+![The circulation desk](docs/screenshots/circulation.png)
+
+### Settings
+
+Circulation rules, CSV exports and database backup.
+
+![The settings tab](docs/screenshots/settings.png)
+
+</details>
+
 ## Quick start
 
 On Windows:
