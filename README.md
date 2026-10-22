@@ -233,3 +233,12 @@ saving settings. They skip themselves if no display is available.
   that decide what counts as overdue — `date('now')` in SQLite is UTC, which is
   a day out for part of every day.
 - CSV exports open directly in Excel or any spreadsheet.
+
+## License
+
+MIT — see [LICENSE](LICENSE). You are free to use, modify and distribute this
+code, including commercially, as long as the copyright notice travels with it.
+
+The bundled `lib/sqlite-jdbc-3.50.3.0.jar` is third-party software by Taro L.
+Saito and contributors, distributed under the Apache License 2.0. SQLite itself
+is in the public domain.
