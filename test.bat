@@ -16,4 +16,8 @@ for /f "delims=" %%F in ('dir /s /b src\test\java\*.java') do (
 javac -d build\testclasses -cp "build\classes;%LIB%" @build\testsources.txt
 if errorlevel 1 exit /b 1
 
-java --enable-native-access=ALL-UNNAMED -cp "build\testclasses;build\classes;%LIB%" com.library.RunTests
+rem --enable-native-access only exists on JDK 22+; probe before using it.
+set NATIVE=
+java --enable-native-access=ALL-UNNAMED -version >nul 2>&1 && set NATIVE=--enable-native-access=ALL-UNNAMED
+
+java %NATIVE% -cp "build\testclasses;build\classes;%LIB%" com.library.RunTests

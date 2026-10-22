@@ -7,4 +7,9 @@ set LIB=lib\sqlite-jdbc-3.50.3.0.jar
 if not exist build\classes call "%~dp0build.bat"
 if errorlevel 1 exit /b 1
 
-java --enable-native-access=ALL-UNNAMED -cp "build\classes;%LIB%" com.library.Main %*
+rem --enable-native-access only exists on JDK 22+; it silences the driver's
+rem native-library warning. Probe for it so older JDKs still start.
+set NATIVE=
+java --enable-native-access=ALL-UNNAMED -version >nul 2>&1 && set NATIVE=--enable-native-access=ALL-UNNAMED
+
+java %NATIVE% -cp "build\classes;%LIB%" com.library.Main %*
