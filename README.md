@@ -7,10 +7,14 @@ stored in a single SQLite database file.
 **Java 17+ with Swing** for the interface and **SQLite via JDBC** for storage.
 One dependency, no build tool required.
 
-![The dashboard, showing headline counts, the overdue queue and a 14-day issuing chart](docs/screenshots/dashboard.png)
+## Screenshots
 
-<details>
-<summary><b>More screenshots</b> — catalogue, members, circulation desk, settings</summary>
+### Dashboard
+
+Headline counts, the queue of overdue loans with borrower contact details, the
+most-borrowed titles, and a 14-day issuing chart.
+
+![The dashboard](docs/screenshots/dashboard.png)
 
 ### Catalogue
 
@@ -38,8 +42,6 @@ flagged in red with the fine accrued so far.
 Circulation rules, CSV exports and database backup.
 
 ![The settings tab](docs/screenshots/settings.png)
-
-</details>
 
 ## Quick start
 
